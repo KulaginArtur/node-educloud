@@ -23,6 +23,7 @@ const connection = mysql.createConnection({
 });
 
 app.get('/', (req, res) =>{
+  console.log('asychronous problem?');
 // simple query
   connection.query(
       'SELECT * FROM `table` ORDER BY name',
