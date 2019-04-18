@@ -1,52 +1,36 @@
 
 'use script';
-
-console.log('hello world!');
+require('dotenv').config();
 
 const express = require('express');
+const fs      = require('fs');
+const https   = require('https');
 const app = express();
 const bodyParser = require('body-parser');
 
-// get the client
-const mysql = require('mysql2');
-
-app.get('/', (req, res) =>{
-  res.send('Hello World');
-});
-
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME
-
-});
-
 console.log('Alive we ride');
 
-app.get('/', (req, res) =>{
-  console.log('asychronous problem?');
-// simple query
-  connection.query(
-      'SELECT * FROM Animals ORDER BY name',
-      (err, results, fields) => {
-        console.log(results); // results contains rows returned by server
-        console.log(fields); // fields contains extra meta data about results, if available
-        res.send(result);
-      });
+const sslkey  = fs.readFileSync('/etc/pki/tls/private/ca.key');
+const sslcert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
+const options = {
+  key: sslkey,
+  cert: sslcert
+};
+
+app.get('/', (req,res) => {
+  res.send('Hello');
 });
 
-  app.post('/',
-      bodyParser.urlencoded({extended:true}),
-      (req, res) =>{
-        console.log(req.body);
-        res.send('This is HTTP POST');
-      });
-  app.get('/test', (req, res) =>{
-    console.log(req.query);
-    res.send(`Hello ${req.query.name}!`)
-  });
+app.post('/',
+    bodyParser.urlencoded({extended:true}),
+    (req, res) =>{
+      console.log(req.body);
+      res.send('This is HTTP POST');
+    });
+app.get('/test', (req, res) =>{
+  console.log(req.query);
+  res.send(`Hello ${req.query.name}!`)
+});
 
-
-  app.listen(3000);
-
+app.listen(8000); //normal http traffic
+https.createServer(options, app).listen(3000); //https traffic
