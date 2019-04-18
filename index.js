@@ -22,6 +22,8 @@ const connection = mysql.createConnection({
 
 });
 
+console.log('Alive we ride');
+
 app.get('/', (req, res) =>{
   console.log('asychronous problem?');
 // simple query
