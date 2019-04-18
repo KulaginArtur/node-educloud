@@ -28,7 +28,7 @@ app.get('/', (req, res) =>{
   console.log('asychronous problem?');
 // simple query
   connection.query(
-      'SELECT * FROM `table` ORDER BY name',
+      'SELECT * FROM Animals ORDER BY name',
       (err, results, fields) => {
         console.log(results); // results contains rows returned by server
         console.log(fields); // fields contains extra meta data about results, if available
